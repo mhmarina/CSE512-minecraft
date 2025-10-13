@@ -1,3 +1,5 @@
-Backend: run pip install -r requirements.txt
+Prereqs: Node.js, python
 <br>
-frontend: npm i && npm start
+Backend: ```cd backend run pip install -r requirements.txt && python3 app.py```
+<br>
+Frontend: ```cd frontend/minecraft-project npm i && npm run dev```
