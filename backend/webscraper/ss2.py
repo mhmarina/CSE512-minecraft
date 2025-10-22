@@ -1,4 +1,3 @@
-# query_mcsrvstat.py
 import asyncio
 import aiohttp
 import json
@@ -6,8 +5,8 @@ import time
 from aiohttp import ClientTimeout
 from pathlib import Path
 
-API = "https://api.mcsrvstat.us/2/{}"  # append ip or ip:port
-INPUT = "minecraft_ips.json"
+API = "https://api.mcsrvstat.us/3/{}"  # append ip or ip:port
+INPUT = "minecraft_servers.json"
 OUTDIR = Path("results")
 OUTDIR.mkdir(exist_ok=True)
 
@@ -31,28 +30,52 @@ async def fetch_one(session, sem, ip):
                     else:
                         # other HTTP errors - record and stop
                         return {"_ip": ip, "error_http_status": resp.status, "_queried_at": int(time.time())}
-            except Exception as e:
+            except Exception:
                 await asyncio.sleep(2 ** attempt)
         return {"_ip": ip, "error": "max_retries", "_queried_at": int(time.time())}
 
 async def main():
-    js = json.load(open(INPUT))
-    ips = js.get("ips", [])
+    try:
+        with open(INPUT) as f:
+            js = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Error reading input file: {e}")
+        return
+
+    ips = js.get("ips") or js.get("servers") or []
+    print(f"Loaded {len(ips)} servers to query.")
+
     sem = asyncio.Semaphore(SEM_LIMIT)
     conn = aiohttp.TCPConnector(limit=SEM_LIMIT)
-    async with aiohttp.ClientSession(connector=conn, headers={"User-Agent": "MyBot/1.0 (+your-email)"}) as session:
+
+    async with aiohttp.ClientSession(
+        connector=conn, headers={"User-Agent": "MyBot/1.0 (+your-email)"}
+    ) as session:
         tasks = [fetch_one(session, sem, ip) for ip in ips]
         results = []
+        skipped = 0
+
         for coro in asyncio.as_completed(tasks):
             res = await coro
+            # Skip any result with error keys
+            if "error" in res or "error_http_status" in res:
+                skipped += 1
+                continue
+
             results.append(res)
-            # stream to disk incrementally to avoid losing everything on crash:
+            # Save valid results incrementally
             with open(OUTDIR / f"{res['_ip'].replace(':','_')}.json", "w") as f:
                 json.dump(res, f)
-    # Optionally write an index file
+
+    # Write summary index file
     with open(OUTDIR / f"index_{int(time.time())}.json", "w") as f:
-        json.dump({"count": len(results), "generated_at": int(time.time())}, f)
-    print("Done. Fetched:", len(results))
+        json.dump({
+            "count_saved": len(results),
+            "count_skipped": skipped,
+            "generated_at": int(time.time())
+        }, f)
+
+    print(f"Done. Saved: {len(results)}, Skipped: {skipped}")
 
 if __name__ == "__main__":
     asyncio.run(main())
