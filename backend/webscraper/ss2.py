@@ -5,7 +5,7 @@ import time
 from aiohttp import ClientTimeout
 from pathlib import Path
 
-API = "https://api.mcsrvstat.us/2/{}"  # append ip or ip:port
+API = "https://api.mcsrvstat.us/3/{}"  # append ip or ip:port
 INPUT = "minecraft_servers.json"
 OUTDIR = Path("results")
 OUTDIR.mkdir(exist_ok=True)
