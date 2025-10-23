@@ -1,15 +1,17 @@
 import asyncio
 import json
 from mcstatus import BedrockServer, JavaServer
+from datetime import datetime
 
 INPUT = "minecraft_servers.json"
 
-async def query_ips(ip, s, p, results, sem):
+async def query_ips(ip, s, p, results, sem, dt):
     async with sem:
         try:
             status = await (await JavaServer.async_lookup(ip)).async_status()
             res = {
                 "ip": ip,
+                "timestamp": dt,
                 "online": True,
                 "latency": status.latency,
                 "curr_players": status.players.online,
@@ -21,6 +23,7 @@ async def query_ips(ip, s, p, results, sem):
         except TimeoutError:
             res = {
                 "ip": ip,
+                "timestamp": dt,
                 "online": False
             }
             results.append(res)  
@@ -32,6 +35,7 @@ async def query_ips(ip, s, p, results, sem):
                 status = await (await BedrockServer.async_lookup(ip)).async_status()
                 res = {
                     "ip": ip,
+                    "timestamp": dt,
                     "online": True,
                     "latency": status.latency,
                     "curr_players": status.players.online,
@@ -43,6 +47,7 @@ async def query_ips(ip, s, p, results, sem):
             except TimeoutError:
                 res = {
                     "ip": ip,
+                    "timestamp": dt,
                     "online": False
                 }
                 results.append(res)  
@@ -50,7 +55,7 @@ async def query_ips(ip, s, p, results, sem):
             
             # any other errors are a lost cause...
             except:
-                # TODO: remove these IPs
+                # TODO: remove IPs that completely fail from query list
                 s[0] += 1
 
 async def main():
@@ -66,8 +71,9 @@ async def main():
     proc = [0]
     skipped = [0]
     results = []
+    dt = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     sem = asyncio.Semaphore(50) 
-    await asyncio.wait({asyncio.create_task(query_ips(ip, skipped, proc, results, sem)) for ip in ips})
+    await asyncio.wait({asyncio.create_task(query_ips(ip, skipped, proc, results, sem, dt)) for ip in ips})
     print(f"processed: {proc[0]}, skipped: {skipped[0]}")
 
     # results is a list of json objects/ dict
