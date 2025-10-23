@@ -2,6 +2,7 @@ import asyncio
 import json
 from mcstatus import BedrockServer, JavaServer
 from datetime import datetime
+from insert_db import insert_data
 
 INPUT = "minecraft_servers.json"
 
@@ -56,7 +57,9 @@ async def main():
     # results is a list of json objects/ dict
     # run and pipe output to out.txt:
     # python3 ss2.py > out.txt
-    # we can do insertions HERE:
+    # Insertion to DB:
+    insert_data(results)
+
     for result in results:
         print(json.dumps(result, indent=4))
         print("")
