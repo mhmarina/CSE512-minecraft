@@ -1,6 +1,6 @@
 USE minecraft;
 
 INSERT INTO servers (ip)
-VALUES (%s)
+VALUES %s
 ON CONFLICT (ip) DO NOTHING;
 
