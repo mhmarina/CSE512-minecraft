@@ -29,34 +29,11 @@ async def query_ips(ip, s, p, results, sem, dt):
             results.append(res)  
             p[0] += 1  
 
-        except:
-            # try bedrock
-            try:
-                status = await (await BedrockServer.async_lookup(ip)).async_status()
-                res = {
-                    "ip": ip,
-                    "timestamp": dt,
-                    "online": True,
-                    "latency": status.latency,
-                    "curr_players": status.players.online,
-                    "max_players": status.players.max,
-                }
-                results.append(res)
-                p[0] += 1
-
-            except TimeoutError:
-                res = {
-                    "ip": ip,
-                    "timestamp": dt,
-                    "online": False
-                }
-                results.append(res)  
-                p[0] += 1  
-            
-            # any other errors are a lost cause...
-            except:
-                # TODO: remove IPs that completely fail from query list
-                s[0] += 1
+        except Exception as e:
+            # TODO: remove IPs that completely fail from query list
+            # or keep them idk
+            # maybe we can log the errors or smt and leave it at that?
+            s[0] += 1
 
 async def main():
     try:
