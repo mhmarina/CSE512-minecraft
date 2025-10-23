@@ -1,18 +1,25 @@
 import os
+from pathlib import Path
 import psycopg2
 from psycopg2.extras import execute_values
+from dotenv import load_dotenv
+
+load_dotenv()
 
 #load credentials from .env file (i think this is good just so that the credentials are not in the code)
+#.env file should be located in CSE512-MINECRAFT/.env
 DB_USER = os.getenv("DB_USER")
 DB_PASS = os.getenv("DB_PASS")
 DB_HOST = os.getenv("DB_HOST")
 DB_NAME = os.getenv("DB_NAME", "minecraft")
 
+#getting SQL path
+SQL_DIR = str(Path(__file__).resolve().parent.parent.parent  / "SQL Queries/")
 #load sql files
-with open("insert_servers.sql", "r") as f:
+with open(f"{SQL_DIR}/insert_servers.sql", "r") as f:
     sql_insert_server = f.read().strip()
 
-with open("insert_server_data.sql", "r") as f:
+with open(f"{SQL_DIR}/insert_server_data.sql", "r") as f:
     sql_insert_server_data = f.read().strip()
 
 
@@ -53,7 +60,7 @@ def insert_data(data_list):
 
     except Exception as e:
         conn.rollback()
-        print("Error occured when inserting data to database : {e}")
+        print(f"Error occured when inserting data to database : {e}")
 
     finally:
         cur.close()
