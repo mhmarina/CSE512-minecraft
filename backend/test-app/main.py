@@ -9,6 +9,7 @@ import psycopg
 from psycopg.errors import SerializationFailure, Error
 from psycopg.rows import namedtuple_row
 
+from ss2 import ss2
 
 # Retrieve Job-defined env vars
 TASK_INDEX = os.getenv("CLOUD_RUN_TASK_INDEX", 0)
@@ -56,7 +57,7 @@ if __name__ == "__main__":
     with psycopg.connect(DATABASE_URL) as conn:
         try:
             # get info on servers
-            with open('../webscraper/minecraft_servers.json', 'r') as serverList:
+            with open('minecraft_servers.json', 'r') as serverList:
                 serverIPs = json.load(serverList)
                 totalServers = int(serverIPs["total_servers"])
                 
