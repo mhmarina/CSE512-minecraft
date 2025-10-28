@@ -1,4 +1,2 @@
-psycopg[binary]
 typing-extensions>=4.6
 tzdata
-psycopg-binary==3.2.11
