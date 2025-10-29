@@ -1,2 +1,4 @@
 important info.txt
 variables.env
+.env
+__pycache__

@@ -8,5 +8,4 @@ dnspython>=2.4.2
 setuptools
 Flask
 python-dotenv
-psycopg2
 psycopg2-binary
