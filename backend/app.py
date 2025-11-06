@@ -1,8 +1,10 @@
 from flask import Flask, jsonify
 import os
 import psycopg2
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, origins=["http://localhost:5173"])
 
 DB_USER = os.getenv("DB_USER")
 DB_PASS = os.getenv("DB_PASS")
@@ -56,4 +58,4 @@ def get_top_uptime(limit):
          return None
   
 if __name__ == "__main__":
-  app.run(debug=True) 
+  app.run() 
