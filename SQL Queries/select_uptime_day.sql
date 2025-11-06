@@ -1,3 +1,4 @@
+USE minecraft;
 -- date should look like this: '2025-11-05' 
 SELECT
   DATE(timestamp) AS day,

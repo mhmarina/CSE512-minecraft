@@ -1,3 +1,4 @@
+USE minecraft;
 -- handle division by 0 in backend
 SELECT 
   DATE(timestamp) AS day,

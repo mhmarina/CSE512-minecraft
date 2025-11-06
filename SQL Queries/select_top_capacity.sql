@@ -1,10 +1,12 @@
-select * from(
+USE minecraft;
+
+SELECT * from(
 SELECT 
   ip, AVG(num_players/max_players) AS average_capacity
 FROM server_data
 WHERE max_players != 0
-and max_players > num_players
-group by ip) 
-where average_capacity > 0
-order by average_capacity desc
-limit %s
+AND max_players > num_players
+GROUP BY ip) 
+WHERE average_capacity > 0
+ORDER BY average_capacity DESC
+LIMIT %s
