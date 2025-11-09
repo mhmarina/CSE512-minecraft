@@ -1,27 +1,19 @@
 import { useState } from 'react'
 import './App.css'
-import BarGraphContainer from './BarGraphContainer'
-import LineGraphContainer from './LineGraphContainer'
+import RankingsContainer from './RankingsContainer';
 
 function App() {
-  const [selectedUptime, setSelectedUptime] = useState(null);
-  const [selectedCapacity, setSelectedCapacity] = useState(null);
-
-  const handleSelectedUptime = (ip) => {
-    setSelectedUptime(ip);
-  };
-
-  const handleSelectedCapacity = (ip) => {
-    setSelectedCapacity(ip);
-  }
-
   return (
     <div style={{width:"100vw"}}>
       <h1>Minecraft Data Visualizer</h1>
-      <div style={{display: 'flex', flexDirection: 'row', gap: '8px'}}>
-        <BarGraphContainer onSelect={[handleSelectedUptime, handleSelectedCapacity]} />
-        <LineGraphContainer selected={[selectedUptime, selectedCapacity]} />
-      </div>
+      <RankingsContainer 
+        metric="uptime"
+        numRankings={150}
+      />
+      <RankingsContainer 
+        metric="capacity"
+        numRankings={150}
+      />      
     </div>
   )
 }

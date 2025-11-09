@@ -40,7 +40,7 @@ def get_top_capacity(limit):
            print("No results for get_top_capacity")
       except Exception as e:
          print(e)
-         return None
+         return jsonify([])
       
 @app.route("/api/uptime/<limit>")
 def get_top_uptime(limit):
@@ -57,7 +57,7 @@ def get_top_uptime(limit):
            print("No results for get_top_capacity")
       except Exception as e:
          print(e)
-         return None
+         return jsonify([])
   
 @app.route("/api/uptime/range/<ip>")
 def get_uptime_range(ip):
@@ -74,7 +74,7 @@ def get_uptime_range(ip):
         print(f"No results for get_uptime_range_{ip}")
     except Exception as e:
       print(e)
-      return None
+      return jsonify([])
 
 
 @app.route("/api/capacity/range/<ip>")
@@ -92,7 +92,7 @@ def get_capacity_range(ip):
         print(f"No results for get_capacity_range_{ip}")
     except Exception as e:
       print(e)
-      return None
+      return jsonify([])
 
 
 @app.route("/api/uptime/day/<ip>/<date>")
@@ -110,7 +110,7 @@ def get_uptime_day(ip, date):
         print(f"No results for get_uptime_day_{ip}_{date}")
     except Exception as e:
       print(e)
-      return None
+      return jsonify([])
 
 
 @app.route("/api/capacity/day/<ip>/<date>")
@@ -128,7 +128,7 @@ def get_capacity_day(ip, date):
         print(f"No results for get_capacity_day_{ip}_{date}")
     except Exception as e:
       print(e)
-      return None
+      return jsonify([])  
 
 if __name__ == "__main__":
   app.run(debug=True) 

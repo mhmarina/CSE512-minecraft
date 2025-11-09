@@ -4,30 +4,31 @@ import { useEffect, useState } from 'react';
 // x = label, y = val
 // props is a json obj
 
-function BarChart(props) {
-    const [option, setOption] = useState({});
+function BarChart({data, onSelect}) {
     const [selected, setSelected] = useState(null);
+    const [option, setOption] = useState({});
     const defaultColor = '#5470C6';
     const highlightColor = '#FF5733';
-
+    
+    console.log(data)
     useEffect(() => {
         const opt = {
             xAxis: {
                 type: 'category',
-                data: props.data.map((x) => x[0]),
+                data: data && data.length > 0 ? data.map((x) => x[0]) : [],
                 axisLabel: {
                     show: false
-                    }
+                }
+            },
+            dataZoom: [
+                {
+                    id: 'dataZoomX',
+                    type: 'inside',
+                    xAxisIndex: [0],
+                    filterMode: 'filter'
                 },
-                dataZoom: [
-                    {
-                        id: 'dataZoomX',
-                        type: 'inside',
-                        xAxisIndex: [0],
-                        filterMode: 'filter'
-                    },
-                ],
-                tooltip: {
+            ],
+            tooltip: {
                 trigger: 'axis',
                 axisPointer: {
                     type: 'shadow'
@@ -43,35 +44,35 @@ function BarChart(props) {
                 max: 1,
                 interval: 0.5,
                 axisLabel: {
-                formatter: '{value}'
+                    formatter: '{value}'
                 }   
             },
             series: [
                 {
-                    data: props.data.map((x) => ({
+                    data: data && data.length > 0 ? data.map((x) => ({
                         value: x[1],
                         itemStyle: { color: selected === x[0] ? highlightColor : defaultColor }
-                    })),
+                    })) : [] ,
                     type: 'bar'
                 }
             ]
         }; 
         setOption(opt)
-    }, [selected])
+    }, [selected, data])
 
-        const onChartClick = (params) => {
-            setSelected(params.name)
-            if (props.onBarClick) {
-                props.onBarClick(params.name);
-            } 
-        };
+    const onChartClick = (params) => {
+        setSelected(params.name)
+        if (onSelect) {
+            onSelect(params.name);
+        } 
+    };
 
-        const onEvents = {
-            click: onChartClick,
-        };
+    const onEvents = {
+        click: onChartClick,
+    };
 
     return (
-        <div>
+        <div style={{width: "100%"}}>
             <ReactEcharts option={option} onEvents={onEvents}/>
         </div>
     )
