@@ -1,4 +1,4 @@
-import './App.css'
+import './styles/App.css'
 import ReactEcharts from "echarts-for-react"; 
 import { useState, useEffect } from 'react';
 // x = label, y = val

@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import './App.css'
+import './styles/App.css'
 import RankingsContainer from './RankingsContainer';
 
 function App() {
@@ -8,11 +7,11 @@ function App() {
       <h1>Minecraft Data Visualizer</h1>
       <RankingsContainer 
         metric="uptime"
-        numRankings={150}
+        numRankings={2}
       />
       <RankingsContainer 
         metric="capacity"
-        numRankings={150}
+        numRankings={2}
       />      
     </div>
   )
