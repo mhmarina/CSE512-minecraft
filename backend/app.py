@@ -2,9 +2,11 @@ from flask import Flask, jsonify
 import os
 import psycopg2
 from flask_cors import CORS
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:5173"])
+CORS(app)
 
 DB_USER = os.getenv("DB_USER")
 DB_PASS = os.getenv("DB_PASS")
@@ -57,5 +59,76 @@ def get_top_uptime(limit):
          print(e)
          return None
   
+@app.route("/api/uptime/range/<ip>")
+def get_uptime_range(ip):
+  with open(SQL_PATH+"select_uptime_range.sql", "r") as f:
+    query = f.read().strip()
+  conn = get_connection()
+  with conn.cursor() as cursor:
+    try:
+      cursor.execute(query, [ip])
+      result = cursor.fetchall()
+      if result:
+        return jsonify(result)
+      else:
+        print(f"No results for get_uptime_range_{ip}")
+    except Exception as e:
+      print(e)
+      return None
+
+
+@app.route("/api/capacity/range/<ip>")
+def get_capacity_range(ip):
+  with open(SQL_PATH+"select_capacity_range.sql", "r") as f:
+    query = f.read().strip()
+  conn = get_connection()
+  with conn.cursor() as cursor:
+    try:
+      cursor.execute(query, [ip])
+      result = cursor.fetchall()
+      if result:
+        return jsonify(result)
+      else:
+        print(f"No results for get_capacity_range_{ip}")
+    except Exception as e:
+      print(e)
+      return None
+
+
+@app.route("/api/uptime/day/<ip>/<date>")
+def get_uptime_day(ip, date):
+  with open(SQL_PATH+"select_uptime_day.sql", "r") as f:
+    query = f.read().strip()
+  conn = get_connection()
+  with conn.cursor() as cursor:
+    try:
+      cursor.execute(query, [ip, date])
+      result = cursor.fetchall()
+      if result:
+        return jsonify(result)
+      else:
+        print(f"No results for get_uptime_day_{ip}_{date}")
+    except Exception as e:
+      print(e)
+      return None
+
+
+@app.route("/api/capacity/day/<ip>/<date>")
+def get_capacity_day(ip, date):
+  with open(SQL_PATH+"select_capacity_day.sql", "r") as f:
+    query = f.read().strip()
+  conn = get_connection()
+  with conn.cursor() as cursor:
+    try:
+      cursor.execute(query, [ip, date])
+      result = cursor.fetchall()
+      if result:
+        return jsonify(result)
+      else:
+        print(f"No results for get_capacity_day_{ip}_{date}")
+    except Exception as e:
+      print(e)
+      return None
+
 if __name__ == "__main__":
-  app.run() 
+  app.run(debug=True) 

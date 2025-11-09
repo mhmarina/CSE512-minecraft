@@ -3,3 +3,4 @@ python-dotenv
 psycopg-binary==3.2.11
 psycopg2-binary
 flask-cors
+python-dotenv

@@ -1,8 +1,7 @@
 USE minecraft;
--- handle division by 0 in backend
 SELECT 
   DATE(timestamp) AS day,
-  AVG(num_players/max_players) AS daily_capacity_rate
+  AVG(num_players/COALESCE(NULLIF(max_players,0),1))
 FROM server_data
 WHERE ip = %s
 GROUP BY DATE(timestamp)

@@ -1,16 +1,17 @@
 import './App.css';
-import { API_BASE__URL } from './Constants';
+import { API_BASE_URL } from './Constants';
 import BarChart from './BarChart';
 import { useEffect, useState } from 'react';
 
-function GraphContainer(props) {
+function BarGraphContainer(props) {
+    // props.onSelect[0] = handleSelectedUptime, props.onSelect[1] = handleSelectedCapacity
     const [capacityData, setCapacityData] = useState(null);
     const [uptimeData, setUptimeData] = useState(null)
 
     useEffect(() => {
         async function GetCapacityData() {
             try {
-                const resp = await fetch(API_BASE__URL + "api/capacity/150");
+                const resp = await fetch(API_BASE_URL + "api/capacity/10");
                 if (!resp.ok) {
                     throw new Error(`Response status: ${resp.status}`);
                 }
@@ -26,12 +27,13 @@ function GraphContainer(props) {
     useEffect(() => {
     async function GetUptimeData() {
         try {
-            const resp = await fetch(API_BASE__URL + "api/uptime/2000");
+            const resp = await fetch(API_BASE_URL + "api/uptime/10");
             if (!resp.ok) {
                 throw new Error(`Response status: ${resp.status}`);
             }
             const result = await resp.json();
             setUptimeData(result);
+            console.log(result)
             } catch (error) {
                 console.error(error.message);
             }
@@ -39,24 +41,26 @@ function GraphContainer(props) {
         GetUptimeData();
     }, []);
 
+    const handleBarClick = (onSelect, name) => {
+        onSelect(name);
+    };
+
     return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div style={{display: "flex", flexDirection: "column", width: "50%"}}>
             <div>
                 <h2>Most popular servers</h2>
-                <p>Ranks servers based on average number of players/ maximum number of players</p>
-                <div style={{ display: "flex", flexDirection: "column", alignContent: "center", width: "90vw" }}>
-                    {capacityData && <BarChart data={capacityData}/>}
+                <div style={{ display: "flex", flexDirection: "column", alignContent: "center", width: "100%" }}>
+                    {capacityData && <BarChart data={capacityData} onBarClick={(name)=>handleBarClick(props.onSelect[1], name)}/>} 
                 </div>
             </div>
             <div>
                 <h2>Most active servers</h2>
-                <p>Ranks servers based on average uptime (onlineness)</p>
-                <div style={{ display: "flex", flexDirection: "column", alignContent: "center", width: "90vw"}}>
-                    {uptimeData && <BarChart data={uptimeData}/>}
+                <div style={{ display: "flex", flexDirection: "column", alignContent: "center", width: "100%"}}>
+                    {uptimeData && <BarChart data={uptimeData} onBarClick={(name)=>handleBarClick(props.onSelect[0], name)}/>}
                 </div>
             </div>
         </div>
     );
 }
 
-export default GraphContainer;
+export default BarGraphContainer;
