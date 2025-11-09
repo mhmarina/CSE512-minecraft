@@ -129,6 +129,57 @@ def get_capacity_day(ip, date):
     except Exception as e:
       print(e)
       return jsonify([])  
+    
+@app.route("/api/ip")
+def get_ips():
+  with open(SQL_PATH+"select_ips.sql", "r") as f:
+    query = f.read().strip()
+  conn = get_connection()
+  with conn.cursor() as cursor:
+    try:
+      cursor.execute(query)
+      result = cursor.fetchall()
+      if result:
+        return jsonify(result)
+      else:
+        print(f"No ips found")
+    except Exception as e:
+      print(e)
+      return jsonify([])  
 
+@app.route("/api/capacity/avg/<ip>")
+def get_avg_capacity(ip):
+  with open(SQL_PATH+"select_avg_capacity.sql", "r") as f:
+    query = f.read().strip()
+  conn = get_connection()
+  with conn.cursor() as cursor:
+    try:
+      cursor.execute(query, [ip])
+      result = cursor.fetchall()
+      if result:
+        return jsonify(result)
+      else:
+        print(f"No ips found")
+    except Exception as e:
+      print(e)
+      return jsonify([])  
+    
+@app.route("/api/uptime/avg/<ip>")
+def get_avg_uptime(ip):
+  with open(SQL_PATH+"select_avg_uptime.sql", "r") as f:
+    query = f.read().strip()
+  conn = get_connection()
+  with conn.cursor() as cursor:
+    try:
+      cursor.execute(query, [ip])
+      result = cursor.fetchall()
+      if result:
+        return jsonify(result)
+      else:
+        print(f"No ips found")
+    except Exception as e:
+      print(e)
+      return jsonify([]) 
+    
 if __name__ == "__main__":
   app.run(debug=True) 
