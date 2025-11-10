@@ -1,5 +1,6 @@
 import './styles/App.css'
 import RankingsContainer from './RankingsContainer';
+import SearchContainer from './SearchContainer';
 
 function App() {
   return (
@@ -12,7 +13,8 @@ function App() {
       <RankingsContainer 
         metric="capacity"
         numRankings={2}
-      />      
+      />
+      <SearchContainer/>
     </div>
   )
 }
