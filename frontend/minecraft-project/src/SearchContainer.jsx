@@ -1,6 +1,5 @@
 import './styles/App.css';
 import { API_BASE_URL } from './Constants';
-import BarChart from './BarChart';
 import { useEffect, useState } from 'react';
 import LineGraph from './LineGraph';
 import Select from 'react-select';
@@ -8,10 +7,15 @@ import { defaultTheme } from 'react-select';
 
 
 function SearchContainer({metric, numRankings}) {
-    const [rangeLineData, setRangeLineData] = useState(null)
-    const [dayLineData, setDayLineData] = useState(null)
+    const [rangeUptimeData, setRangeUptimeData] = useState(null)
+    const [rangeCapacityData, setRangeCapacityData] = useState(null)
+    const [dayUptimeData, setDayUptimeData] = useState(null)
+    const [dayCapacityData, setDayCapacityData] = useState(null)
     const [selectedIp, setSelectedIp] = useState(null)
-    const [selectedDay, setSelectedDay] = useState(null)
+    const [selectedUptimeDay, setSelectedUptimeDay] = useState(null)
+    const [selectedCapacityDay, setSelectedCapacityDay] = useState(null)
+    const [avgUptime, setAvgUptime] = useState(0)
+    const [avgCapacity, setAvgCapacity] = useState(0)
     const [ipList, setIpList] = useState([])
 
     useEffect(() => {
@@ -22,7 +26,6 @@ function SearchContainer({metric, numRankings}) {
                 const resp = await fetch(url);
                 if (!resp.ok) throw new Error(`Response status: ${resp.status}`);
                 const result = await resp.json();
-                console.log(result)
                 setIpList(result.map((x)=>({
                     value: x,
                     label: x
@@ -34,71 +37,119 @@ function SearchContainer({metric, numRankings}) {
         fetchListIPs()
     }, [])
 
-    // function onLineSelect(day){
-    //     setSelectedDay(day)
-    // }
+    async function fetchRangeData(metric) {
+        if (selectedIp){
+            const url = `${API_BASE_URL}api/${metric}/range/${selectedIp}`;
+            try {
+                const resp = await fetch(url);
+                if (!resp.ok) throw new Error(`Response status: ${resp.status}`);
+                const result = await resp.json();
+                return result
+            } catch (err) {
+                console.error('Failed to fetch range data', err.message);
+                return null
+            }
+        }
+    }
 
-    // //get Bar Graph Data
-    // useEffect(() => {
-    //     async function getBarData() {
-    //         try {
-    //             const url = API_BASE_URL + `api/${metric}/${numRankings}`
-    //             const resp = await fetch(url);
-    //             if (!resp.ok) {
-    //                 throw new Error(`Response status: ${resp.status}`);
-    //             }
-    //             const result = await resp.json();
-    //             setBarData(result);
-    //             } catch (error) {
-    //                 console.error(error.message);
-    //             }
-    //         }
-    //     getBarData();
-    // }, []);
+    async function fetchDayData(metric, selectedDay){
+        const url = `${API_BASE_URL}api/${metric}/day/${selectedIp}/${new Date(selectedDay).toISOString().split('T')[0]}`;
+        try {
+            const resp = await fetch(url);
+            if (!resp.ok) throw new Error(`Response status: ${resp.status}`);
+            const result = await resp.json();
+            return result;
+        } catch (err) {
+            console.error('Failed to fetch range data', err.message);
+            return null
+        }  
+    }
 
-    // //get selected IP's range data
-    // useEffect(() => {
-    //     async function fetchRangeData() {
-    //         if (selectedIp){
-    //             const url = `${API_BASE_URL}api/${metric}/range/${selectedIp}`;
-    //             try {
-    //                 const resp = await fetch(url);
-    //                 if (!resp.ok) throw new Error(`Response status: ${resp.status}`);
-    //                 const result = await resp.json();
-    //                 setRangeLineData(result);
-    //                 // reset selected day
-    //                 setSelectedDay(null)
-    //             } catch (err) {
-    //                 console.error('Failed to fetch range data', err.message);
-    //             }
-    //         }
-    //     }
-    //     if(selectedIp){
-    //         fetchRangeData();
-    //     }
-    // }, [selectedIp]);
+    async function fetchAvg(metric){
+        const url = `${API_BASE_URL}api/${metric}/avg/${selectedIp}`
+        try{
+            const resp = await fetch(url)
+            if(!resp.ok) throw new Error(`Error fetch avg ${metric} for ${selectedIp}: ${resp.status}`)
+            const result = await resp.json();
+            return result;
+        }catch (err) {
+            console.error('Failed to fetch average', err.message);
+            return null
+        }  
+    }
 
-    // //get selected Day's hourly data
-    // useEffect(() => {
-    //     async function fetchDayData(){
-    //         const url = `${API_BASE_URL}api/${metric}/day/${selectedIp}/${new Date(selectedDay).toISOString().split('T')[0]}`;
-    //         try {
-    //             const resp = await fetch(url);
-    //             if (!resp.ok) throw new Error(`Response status: ${resp.status}`);
-    //             const result = await resp.json();
-    //             setDayLineData(result);
-    //         } catch (err) {
-    //             console.error('Failed to fetch range data', err.message);
-    //         }  
-    //     }
-    //     if(selectedIp && selectedDay){
-    //         fetchDayData()
-    //     }
-    //     else if(!selectedDay){
-    //         setDayLineData(null)
-    //     }
-    // }, [selectedDay])
+    useEffect(() => {
+        async function fetchUptimeData() {
+            const data = await fetchRangeData("uptime")
+            if(data){
+                setRangeUptimeData(data)
+                setSelectedUptimeDay(null)
+            }
+        }
+        async function fetchCapacityData() {
+            const data = await fetchRangeData("capacity")
+            if(data){
+                setRangeCapacityData(data)
+                setSelectedCapacityDay(null)
+            }
+        }
+        async function fetchAvgUptime(){
+            const data = await fetchAvg("uptime")
+            if(data){
+                console.log(data)
+                setAvgUptime(data)
+            }
+        }
+        async function fetchAvgCapacity(){
+            const data = await fetchAvg("capacity")
+            if(data){
+                console.log(data)
+                setAvgCapacity(data)
+            }
+        }
+        fetchUptimeData()
+        fetchCapacityData()
+        fetchAvgCapacity()
+        fetchAvgUptime()
+    }, [selectedIp]);
 
+    useEffect(() => {
+        async function fetchData() {
+            const data = await fetchDayData("capacity", selectedCapacityDay)
+            if(data){
+                setDayCapacityData(data)
+            }
+        }
+        if(selectedCapacityDay != null){
+            fetchData()
+        }
+    }, [selectedCapacityDay])
+
+    useEffect(() => {
+        async function fetchData() {
+            const data = await fetchDayData("uptime", selectedUptimeDay)
+            if(data){
+                setDayUptimeData(data) 
+            }
+        }
+        if(selectedUptimeDay != null){
+            fetchData()
+        }
+    }, [selectedUptimeDay])
+
+    function onIPSelect(option){
+        setSelectedIp(option.value[0])
+        setDayCapacityData(null)
+        setDayUptimeData(null)
+    }
+
+    function onCapacitySelect(day){
+        setSelectedCapacityDay(day)
+    }
+
+    function onUptimeSelect(day){
+        setSelectedUptimeDay(day)
+    }
 
     return (
         <div styles={{display: "flex", flexDirection: "column", width:"100vw"}}>
@@ -114,16 +165,29 @@ function SearchContainer({metric, numRankings}) {
                             control: (styles) => ({ ...styles, width: "100%" }), // fill wrapper
                             menu: (styles) => ({ ...styles, width: "100%" }),    // match wrapper
                         }}
+                    onChange={(option)=>onIPSelect(option)}
                     />
                 </div>
             </div>
             <div style={{display:"flex", flexDirection:"row"}}>
-                {/* <LineGraph
-                    data={rangeLineData}
+                ${avgCapacity}
+                <LineGraph
+                    data={rangeCapacityData}
+                    onSelect={onCapacitySelect}
                 />
                 <LineGraph
-                    data={dayLineData}
-                /> */}
+                    data={dayCapacityData}
+                />
+            </div>
+            <div style={{display:"flex", flexDirection:"row"}}>
+                ${avgUptime}
+                <LineGraph
+                    data={rangeUptimeData}
+                    onSelect={onUptimeSelect}
+                />
+                <LineGraph
+                    data={dayUptimeData}
+                />
             </div>
         </div>
     );

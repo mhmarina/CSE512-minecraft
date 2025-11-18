@@ -6,14 +6,14 @@ function App() {
   return (
     <div style={{width:"100vw"}}>
       <h1>Minecraft Data Visualizer</h1>
-      <RankingsContainer 
+      {/* <RankingsContainer 
         metric="uptime"
         numRankings={2}
       />
       <RankingsContainer 
         metric="capacity"
         numRankings={2}
-      />
+      /> */}
       <SearchContainer/>
     </div>
   )
