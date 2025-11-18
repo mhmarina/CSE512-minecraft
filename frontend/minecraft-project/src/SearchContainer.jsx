@@ -2,11 +2,11 @@ import './styles/App.css';
 import { API_BASE_URL } from './Constants';
 import { useEffect, useState } from 'react';
 import LineGraph from './LineGraph';
-import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
 import { defaultTheme } from 'react-select';
 
 
-function SearchContainer({metric, numRankings}) {
+function SearchContainer() {
     const [rangeUptimeData, setRangeUptimeData] = useState(null)
     const [rangeCapacityData, setRangeCapacityData] = useState(null)
     const [dayUptimeData, setDayUptimeData] = useState(null)
@@ -17,6 +17,14 @@ function SearchContainer({metric, numRankings}) {
     const [avgUptime, setAvgUptime] = useState(0)
     const [avgCapacity, setAvgCapacity] = useState(0)
     const [ipList, setIpList] = useState([])
+
+    function loadOptions(inputValue, callback) {
+        console.log(inputValue)
+        const filtered = ipList
+            .filter(ip => ip.label[0].toLowerCase().includes(inputValue.toLowerCase()))
+            .slice(0, 50); 
+        callback(filtered);
+    }
 
     useEffect(() => {
         // load list of IPs
@@ -138,7 +146,7 @@ function SearchContainer({metric, numRankings}) {
     }, [selectedUptimeDay])
 
     function onIPSelect(option){
-        setSelectedIp(option.value[0])
+        setSelectedIp(option.value)
         setDayCapacityData(null)
         setDayUptimeData(null)
     }
@@ -154,19 +162,18 @@ function SearchContainer({metric, numRankings}) {
     return (
         <div styles={{display: "flex", flexDirection: "column", width:"100vw"}}>
             <div style={{ display: "flex", width: "100%", justifyContent: "center"}}>
-                <div style={{ width: "50%" }}> {/* wrapper div enforces width */}
-                    <Select
-                    className="basic-single"
-                    classNamePrefix="select"
-                    name="Server IPs"
-                    options={ipList}
+                <div style={{ width: "50%" }}>
+                <AsyncSelect
+                    cacheOptions
+                    loadOptions={loadOptions}
+                    defaultOptions={ipList.slice(0, 50)} 
+                    onChange={onIPSelect}
                     styles={{
-                            option: (styles) => ({ ...styles, color: "#000" }),
-                            control: (styles) => ({ ...styles, width: "100%" }), // fill wrapper
-                            menu: (styles) => ({ ...styles, width: "100%" }),    // match wrapper
-                        }}
-                    onChange={(option)=>onIPSelect(option)}
-                    />
+                        option: (styles) => ({ ...styles, color: "#000" }),
+                        control: (styles) => ({ ...styles, width: "100%" }),
+                        menu: (styles) => ({ ...styles, width: "100%" }),
+                    }}
+                />
                 </div>
             </div>
             <div style={{display:"flex", flexDirection:"row"}}>

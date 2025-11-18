@@ -37,7 +37,8 @@ def get_top_capacity(limit):
         if result:
            return jsonify(result)
         else:
-           print("No results for get_top_capacity")
+          print("No results for get_top_capacity")
+          return jsonify([])
       except Exception as e:
          print(e)
          return jsonify([])
@@ -54,7 +55,8 @@ def get_top_uptime(limit):
         if result:
            return jsonify(result)
         else:
-           print("No results for get_top_capacity")
+          print("No results for get_top_capacity")
+          return jsonify([])
       except Exception as e:
          print(e)
          return jsonify([])
@@ -72,6 +74,7 @@ def get_uptime_range(ip):
         return jsonify(result)
       else:
         print(f"No results for get_uptime_range_{ip}")
+        return jsonify([])
     except Exception as e:
       print(e)
       return jsonify([])
@@ -90,6 +93,7 @@ def get_capacity_range(ip):
         return jsonify(result)
       else:
         print(f"No results for get_capacity_range_{ip}")
+        return jsonify([])
     except Exception as e:
       print(e)
       return jsonify([])
@@ -108,6 +112,7 @@ def get_uptime_day(ip, date):
         return jsonify(result)
       else:
         print(f"No results for get_uptime_day_{ip}_{date}")
+        return jsonify([])
     except Exception as e:
       print(e)
       return jsonify([])
@@ -126,6 +131,7 @@ def get_capacity_day(ip, date):
         return jsonify(result)
       else:
         print(f"No results for get_capacity_day_{ip}_{date}")
+        return jsonify([])
     except Exception as e:
       print(e)
       return jsonify([])  
@@ -143,6 +149,7 @@ def get_ips():
         return jsonify(result)
       else:
         print(f"No ips found")
+        return jsonify([])
     except Exception as e:
       print(e)
       return jsonify([])  
@@ -160,6 +167,7 @@ def get_avg_capacity(ip):
         return jsonify(result)
       else:
         print(f"No ips found")
+        return jsonify([])
     except Exception as e:
       print(e)
       return jsonify([])  
@@ -177,6 +185,7 @@ def get_avg_uptime(ip):
         return jsonify(result)
       else:
         print(f"No ips found")
+        return jsonify([])
     except Exception as e:
       print(e)
       return jsonify([]) 
