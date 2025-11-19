@@ -12,7 +12,7 @@ Notes:
 Prereqs: Node.js, python
 <br>
 Optional -- set up virtual environment: <br>
-```cd backend && pip -m .venv ven && source .venv/bin/activate``` <br>
+```cd backend && pip -m venv .venv && source .venv/bin/activate``` <br>
 Backend: ```cd backend && run pip install -r requirements.txt && python app.py```
 <br>
 Frontend: ```cd frontend && npm i && npm run dev```
