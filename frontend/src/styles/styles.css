@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'Mojangles'; 
+    src: url('../assets/Minecraft.ttf');
+    font-weight: normal; /* Optional: define font weight */
+    font-style: normal; /* Optional: define font style */
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -11,15 +18,23 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  background-image: url('../assets/bg2.jpg');
+  background-size: cover; /* fill the page */
+  background-position: center;
+  background-repeat: no-repeat;
+
 }
 
 h1 {
+  font-family: 'Mojangles';
   font-size: 3.2em;
   line-height: 1.1;
 }
 
 h2 {
-  font-size: 2.2em;
+  font-family: 'Mojangles';
+  font-size: 2.7em;
   line-height: 0.5;
 }
 
@@ -38,6 +53,12 @@ h2 {
 .graphContainer > *{
     flex: 1;
     min-width: 0;
+}
+
+.sectionContainer{
+  margin-bottom: 150px;
+  background-color: black;
+  z-index: 1;
 }
 
 .aggregateDiv {
