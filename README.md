@@ -13,9 +13,9 @@ Prereqs: Node.js, python
 <br>
 Optional -- set up virtual environment: <br>
 ```cd backend && pip -m .venv ven && source .venv/bin/activate``` <br>
-Backend: ```cd backend run pip install -r requirements.txt && python app.py```
+Backend: ```cd backend && run pip install -r requirements.txt && python app.py```
 <br>
-Frontend: ```cd frontend npm i && npm run dev```
+Frontend: ```cd frontend && npm i && npm run dev```
 
 ## Screenshots
 <img width="1894" height="975" alt="image" src="https://github.com/user-attachments/assets/601d5d2b-f3d5-4987-9e5c-3405fc2b8f63" />
