@@ -83,19 +83,21 @@ function RankingsContainer({metric, numRankings}) {
 
     return (
         <div className='graphContainer'>
-            <div>
+            <div style={{alignSelf: "flex-end"}}>
                 <BarChart
                     onSelect={onBarSelect}
                     data={barData}
                 />
             </div>
-            <div>
+            <div style={{alignSelf: "flex-end"}}>
+                <h3>{selectedIp ? "selected server: " + selectedIp : "select a server for daily stats"}</h3>
                 <LineGraph
                     onSelect={onLineSelect}
                     data={rangeLineData}
                 />
             </div>
-            <div>
+            <div style={{alignSelf: "flex-end"}}>
+                <h3>{selectedDay ? "selected day: " + selectedDay : "select a day for hourly stats"}</h3>
                 <LineGraph
                     data={dayLineData}
                 />

@@ -178,23 +178,6 @@ function SearchContainer() {
             </div>
             <div className='graphContainer'>
                 <div className='aggregateDiv'>
-                    <h3>Average Capacity</h3>
-                    <h1>{avgCapacity}</h1>
-                </div>
-                <div>
-                    <LineGraph
-                        data={rangeCapacityData}
-                        onSelect={onCapacitySelect}
-                    />
-                </div>
-                <div>
-                    <LineGraph
-                        data={dayCapacityData}
-                    />
-                </div>
-            </div>
-            <div className='graphContainer'>
-                <div className='aggregateDiv'>
                     <h3>Average Uptime</h3>
                     <h1>{avgUptime}</h1>
                 </div>
@@ -207,6 +190,23 @@ function SearchContainer() {
                 <div>
                     <LineGraph
                         data={dayUptimeData}
+                    />
+                </div>
+            </div>
+            <div className='graphContainer'>
+                <div className='aggregateDiv'>
+                    <h3>Average Capacity</h3>
+                    <h1>{avgCapacity}</h1>
+                </div>
+                <div>
+                    <LineGraph
+                        data={rangeCapacityData}
+                        onSelect={onCapacitySelect}
+                    />
+                </div>
+                <div>
+                    <LineGraph
+                        data={dayCapacityData}
                     />
                 </div>
             </div>
