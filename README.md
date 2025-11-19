@@ -11,6 +11,13 @@ Notes:
 ## Running the App
 Prereqs: Node.js, python
 <br>
-Backend: ```cd backend run pip install -r requirements.txt && python3 app.py```
+Optional -- set up virtual environment: <br>
+```cd backend && pip -m .venv ven && source .venv/bin/activate``` <br>
+Backend: ```cd backend run pip install -r requirements.txt && python app.py```
 <br>
-Frontend: ```cd frontend/minecraft-project npm i && npm run dev```
+Frontend: ```cd frontend npm i && npm run dev```
+
+## Screenshots
+<img width="1894" height="975" alt="image" src="https://github.com/user-attachments/assets/601d5d2b-f3d5-4987-9e5c-3405fc2b8f63" />
+<img width="1884" height="946" alt="image" src="https://github.com/user-attachments/assets/503cf532-bacc-4a50-8f91-9a2c76c2da08" />
+
