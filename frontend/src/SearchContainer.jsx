@@ -1,4 +1,4 @@
-import './styles/App.css';
+import './styles/styles.css'
 import { API_BASE_URL } from './Constants';
 import { useEffect, useState } from 'react';
 import LineGraph from './LineGraph';
@@ -14,8 +14,8 @@ function SearchContainer() {
     const [selectedIp, setSelectedIp] = useState(null)
     const [selectedUptimeDay, setSelectedUptimeDay] = useState(null)
     const [selectedCapacityDay, setSelectedCapacityDay] = useState(null)
-    const [avgUptime, setAvgUptime] = useState(0)
-    const [avgCapacity, setAvgCapacity] = useState(0)
+    const [avgUptime, setAvgUptime] = useState("0.0000")
+    const [avgCapacity, setAvgCapacity] = useState("0.0000")
     const [ipList, setIpList] = useState([])
 
     function loadOptions(inputValue, callback) {
@@ -104,21 +104,21 @@ function SearchContainer() {
         async function fetchAvgUptime(){
             const data = await fetchAvg("uptime")
             if(data){
-                console.log(data)
-                setAvgUptime(data)
+                setAvgUptime(parseFloat(data).toFixed(4))
             }
         }
         async function fetchAvgCapacity(){
             const data = await fetchAvg("capacity")
             if(data){
-                console.log(data)
-                setAvgCapacity(data)
+                setAvgCapacity(parseFloat(data).toFixed(4))
             }
         }
-        fetchUptimeData()
-        fetchCapacityData()
-        fetchAvgCapacity()
-        fetchAvgUptime()
+        if(selectedIp){
+            fetchUptimeData()
+            fetchCapacityData()
+            fetchAvgCapacity()
+            fetchAvgUptime()
+        }
     }, [selectedIp]);
 
     useEffect(() => {
@@ -160,9 +160,9 @@ function SearchContainer() {
     }
 
     return (
-        <div styles={{display: "flex", flexDirection: "column", width:"100vw"}}>
-            <div style={{ display: "flex", width: "100%", justifyContent: "center"}}>
-                <div style={{ width: "50%" }}>
+        <div style={{display: "flex", flexDirection: "column", overflow: "hidden"}}>
+            <div style={{ display: "flex", justifyContent: "center"}}>
+                <div style={{ width:"50%"}}>
                 <AsyncSelect
                     cacheOptions
                     loadOptions={loadOptions}
@@ -176,25 +176,39 @@ function SearchContainer() {
                 />
                 </div>
             </div>
-            <div style={{display:"flex", flexDirection:"row"}}>
-                ${avgCapacity}
-                <LineGraph
-                    data={rangeCapacityData}
-                    onSelect={onCapacitySelect}
-                />
-                <LineGraph
-                    data={dayCapacityData}
-                />
+            <div className='graphContainer'>
+                <div className='aggregateDiv'>
+                    <h3>Average Capacity</h3>
+                    <h1>{avgCapacity}</h1>
+                </div>
+                <div>
+                    <LineGraph
+                        data={rangeCapacityData}
+                        onSelect={onCapacitySelect}
+                    />
+                </div>
+                <div>
+                    <LineGraph
+                        data={dayCapacityData}
+                    />
+                </div>
             </div>
-            <div style={{display:"flex", flexDirection:"row"}}>
-                ${avgUptime}
-                <LineGraph
-                    data={rangeUptimeData}
-                    onSelect={onUptimeSelect}
-                />
-                <LineGraph
-                    data={dayUptimeData}
-                />
+            <div className='graphContainer'>
+                <div className='aggregateDiv'>
+                    <h3>Average Uptime</h3>
+                    <h1>{avgUptime}</h1>
+                </div>
+                <div>
+                    <LineGraph
+                        data={rangeUptimeData}
+                        onSelect={onUptimeSelect}
+                    />
+                </div>
+                <div>
+                    <LineGraph
+                        data={dayUptimeData}
+                    />
+                </div>
             </div>
         </div>
     );

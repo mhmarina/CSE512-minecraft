@@ -1,4 +1,3 @@
-import './styles/App.css'
 import ReactEcharts from "echarts-for-react"; 
 import { useState, useEffect } from 'react';
 // x = label, y = val
@@ -19,14 +18,6 @@ function LineGraph({data, onSelect}) {
                     show: true // hides labels
                     }
                 },
-                dataZoom: [
-                    {
-                        id: 'dataZoomX',
-                        type: 'inside',
-                        xAxisIndex: [0],
-                        filterMode: 'filter'
-                    },
-                ],
                 tooltip: {
                 trigger: 'axis',
                 axisPointer: {
@@ -78,7 +69,7 @@ function LineGraph({data, onSelect}) {
     };
 
     return (
-        <div style={{width: "100%"}}>
+        <div>
             <ReactEcharts option={option} onEvents={onEvents}/>
         </div>
     )

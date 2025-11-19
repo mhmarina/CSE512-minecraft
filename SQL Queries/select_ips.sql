@@ -1,4 +1,4 @@
 USE minecraft;
 
 SELECT ip FROM servers
-limit 2000
+limit 2

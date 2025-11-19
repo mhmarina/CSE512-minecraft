@@ -1,4 +1,4 @@
-import './styles/App.css';
+import './styles/styles.css'
 import { API_BASE_URL } from './Constants';
 import BarChart from './BarChart';
 import { useEffect, useState } from 'react';
@@ -82,18 +82,24 @@ function RankingsContainer({metric, numRankings}) {
 
 
     return (
-        <div style={{display:"flex", flexDirection:"row", width:"100vw"}}>
-            <BarChart
-                onSelect={onBarSelect}
-                data={barData}
-            />
-            <LineGraph
-                onSelect={onLineSelect}
-                data={rangeLineData}
-            />
-            <LineGraph
-                data={dayLineData}
-            />
+        <div className='graphContainer'>
+            <div>
+                <BarChart
+                    onSelect={onBarSelect}
+                    data={barData}
+                />
+            </div>
+            <div>
+                <LineGraph
+                    onSelect={onLineSelect}
+                    data={rangeLineData}
+                />
+            </div>
+            <div>
+                <LineGraph
+                    data={dayLineData}
+                />
+            </div>
         </div>
     );
 }

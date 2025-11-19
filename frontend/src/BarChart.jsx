@@ -1,4 +1,3 @@
-import './styles/App.css'
 import ReactEcharts from "echarts-for-react"; 
 import { useEffect, useState } from 'react';
 // x = label, y = val
@@ -72,7 +71,7 @@ function BarChart({data, onSelect}) {
     };
 
     return (
-        <div style={{width: "100%"}}>
+        <div>
             <ReactEcharts option={option} onEvents={onEvents}/>
         </div>
     )
