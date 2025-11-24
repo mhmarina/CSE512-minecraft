@@ -13,7 +13,7 @@ Prereqs: Node.js, python
 <br>
 Optional -- set up virtual environment: <br>
 ```cd backend && python -m venv .venv && source .venv/bin/activate``` <br>
-Backend: ```cd backend && run pip install -r requirements.txt && python app.py```
+Backend: ```cd backend && pip install -r requirements.txt && python app.py```
 <br>
 Make sure to have your .env file in the Backend folder. It should contain the following variables: `DB_USER`, `DB_PASS`, `DB_HOST`, and `DB_NAME`.
 <br>
