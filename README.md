@@ -10,7 +10,7 @@ Notes:
 # Running the App
 Prereqs: Node.js, python, cockroachDB
 ## Set up database
-This app uses cockroachDB as its data layer. The schema is available in `SQL Queries/insert_table.sql`. Not down the DB host, name, username and password for `.env` in next step.
+This app uses cockroachDB as its data layer. The schema is available in `SQL Queries/insert_table.sql`. Note down the DB host, name, username and password for `.env` in next step.
 ## Running the Backend
 The backend is a flask server. to run: 
 ```bash
