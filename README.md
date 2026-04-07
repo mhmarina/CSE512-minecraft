@@ -1,3 +1,7 @@
+# Architecture
+<img width="1124" height="871" alt="Architecure Diagram cse 512 - Page 1" src="https://github.com/user-attachments/assets/7920b59b-13df-476b-be7a-827f84c9b156" />
+
+
 # Steps for setting up automated function on Google Cloud Run
 1. From Google Cloud SDK Shell, navigate to the `cloud-deploy` folder
 2. Run the following command to _build_ a container and image from the folder: `gcloud run jobs deploy hourly-data-fetch --source . --tasks 1 --max-retries 5 --region us-west1 --project=project-3ef7264f-b261-47c4-964`
